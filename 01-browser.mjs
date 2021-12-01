@@ -30,7 +30,9 @@ doDebugger({
             },
             onStep: ({ data: { curr, numLargers }, step, el }) => {
                 if (step) {
-                    const divEl = divElement({}, `curr: ${curr}, numLargers: ${numLargers}`);
+                    for (let oldEl of arr) oldEl.classList.remove('highlighted');
+                    const divEl = divElement({ className: 'highlightable highlighted' },
+                        `curr: ${curr}, numLargers: ${numLargers}`);
                     arr.push(divEl);
                     el.appendChild(divEl);
                 }
@@ -46,11 +48,13 @@ doDebugger({
             onStart: ({ step, el }) => {
                 if (!step) return;
                 el.innerHTML = '';
-                arr = [];r = [];
+                arr = [];
             },
             onStep: ({ data: { sum, increased, numLargers }, step, el }) => {
                 if (step) {
-                    const divEl = divElement({}, `sum: ${sum}, increased: ${increased ? 'Y' : 'N'}, numLargers: ${numLargers}`);
+                    for (let oldEl of arr) oldEl.classList.remove('highlighted');
+                    const divEl = divElement({ className: 'highlightable highlighted' },
+                        `sum: ${sum}, increased: ${increased ? 'Y' : 'N'}, numLargers: ${numLargers}`);
                     arr.push(divEl);
                     el.appendChild(divEl);
                 }

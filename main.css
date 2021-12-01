@@ -16,3 +16,11 @@ br {
 .hidden {
     opacity: 0;
 }
+
+.highlightable {
+    transition: background-color 500ms linear;
+}
+
+.highlighted {
+    background-color: yellow;
+}
