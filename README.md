@@ -16,3 +16,5 @@ Let's see how it goes! 😅
 ## references used:
 
 - https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox

@@ -3,3 +3,7 @@ body {
     background-color: #DDD;
     color: #224
 }
+
+br {
+    margin: 1.2em 0;
+}
