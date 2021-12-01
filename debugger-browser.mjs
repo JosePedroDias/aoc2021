@@ -1,6 +1,6 @@
-import { streamLines, selectElement, buttonElement, checkboxElement, brElement, divElement, setVisibility } from './shared-browser.mjs';
+import { streamLines, selectElement, buttonElement, checkboxElement, brElement, divElement, setVisibility, changeText, setAttributes } from './shared-browser.mjs';
 
-export async function doDebugger(parts) {
+export async function doDebugger({ parts, items }) {
     const body = document.body;
 
     let step = true;
@@ -9,12 +9,12 @@ export async function doDebugger(parts) {
 
 
     let mainFormDivEl = divElement();
-    let debuggerDivEl = divElement();
     let nextDivEl = divElement();
+    let debuggerDivEl = divElement({ className: 'debugger' });
 
     body.appendChild(mainFormDivEl);
-    body.appendChild(debuggerDivEl);
     body.appendChild(nextDivEl);
+    body.appendChild(debuggerDivEl);
 
 
 
@@ -38,7 +38,7 @@ export async function doDebugger(parts) {
 
 
     const [ stepCbEl, stepCbLabelEl ] = checkboxElement({
-        label: 'step',
+        label: 'step by step',
         checked: step,
         onChange: (checked) => (step = checked)
     });
@@ -50,11 +50,8 @@ export async function doDebugger(parts) {
 
 
     const [fnSelEl, fnSelLabelEl] = selectElement({
-        label: 'data to use',
-        items: [
-            { label: 'example',    value: '01a.txt' },
-            { label: 'real input', value: '01.txt'  }
-        ],
+        label: 'data to use: ',
+        items,
         onChange: (fn) => (fnToRun = fn)
     });
     mainFormDivEl.appendChild(fnSelLabelEl);
@@ -65,33 +62,37 @@ export async function doDebugger(parts) {
 
 
 
+    const el = debuggerDivEl;
+
     async function runPart(partFn, onStep) {
-        setVisibility(mainFormDivEl, false);
-        setVisibility(nextDivEl, true);
+        if (step) {
+            setVisibility(mainFormDivEl, false, true);
+            setVisibility(nextDivEl, true);
+        }
 
         let g = partFn(streamLines(fnToRun));
 
         let last;
-        for await (const yieldedData of g) {
-            last = onStep(yieldedData, step);
+        for await (const data of g) {
+            last = onStep( { data, step, el });
             step && await nextButtonIsClicked();
         }
 
-        setVisibility(mainFormDivEl, true);
-        setVisibility(nextDivEl, false);
-
+        if (step) {
+            setVisibility(mainFormDivEl, true, true);
+            setVisibility(nextDivEl, false);
+        }
+        
         return last;
     }
-
-
-
+    
     for (const { partFn, onStart, onStep, onDone } of parts) {
-        onStart(step);
         mainFormDivEl.appendChild( buttonElement({
             label: partFn.name,
             onClick: () => {
+                onStart({ step, el });
                 runPart(partFn, onStep)
-                .then((result) => onDone(result, step))
+                .then((result) => onDone({ result, step, el }))
             }
         }) );
     }

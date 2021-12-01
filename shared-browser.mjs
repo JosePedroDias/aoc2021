@@ -21,6 +21,29 @@ function randomString() {
 
 //// HTML-RELATED
 
+export function setAttributes(el, attributesObj) {
+    for (let [k, v] of Object.entries(attributesObj)) {
+        if (k === 'className') {
+            el.className = v;
+        } else if (typeof v === 'function') {
+            el.addEventListener(k, v);
+        } else {
+            el.setAttribute(k, v);
+        }
+    }
+}
+
+function elementFactory(nodeName) {
+    return function(attributesObj, text) {
+        const el = document.createElement(nodeName);
+
+        attributesObj && setAttributes(el, attributesObj);
+        if (text) el.appendChild( document.createTextNode(text) );
+
+        return el;
+    }
+}
+
 
 export function selectElement({ items, label, onChange }) {
     const selectEl = document.createElement('select');
@@ -77,19 +100,9 @@ export function checkboxElement({ label, onChange, checked }) {
 }
 
 
-export function brElement() {
-    return document.createElement('br');
-}
-
-
-export function spanElement() {
-    return document.createElement('span');
-}
-
-
-export function divElement() {
-    return document.createElement('div');
-}
+export const brElement = elementFactory('br');
+export const spanElement = elementFactory('span');
+export const divElement = elementFactory('div');
 
 
 export function setEnabled(buttonEl, enabled) {
@@ -97,6 +110,14 @@ export function setEnabled(buttonEl, enabled) {
 }
 
 
-export function setVisibility(el, visible) {
-    el.style.display = visible ? '' : 'none';
+export function setVisibility(el, visible, keepingLayout) {
+    if (keepingLayout) {
+        el.style.visibility = visible ? '' : 'hidden';
+    } else {
+        el.style.display = visible ? '' : 'none';
+    }
+}
+
+export function changeText(el, text) {
+    el.firstChild.nodeValue = text;
 }

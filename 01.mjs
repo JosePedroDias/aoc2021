@@ -40,8 +40,7 @@ export async function* part2(asyncGen) {
         .map((w, i) => [i, w.data.length])
         .filter(([_i, l]) => l === 3)
         .map(([i, _l]) => i);
-
-        const windowIndex = windowsWith3[0];
+        const windowIndex = windowsWith3[0]; // as we know there is at most 1
 
         if (isFinite(windowIndex)) {
             const sum = sumArray(windows[windowIndex].data);

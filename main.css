@@ -7,3 +7,12 @@ body {
 br {
     margin: 1.2em 0;
 }
+
+.debugger {
+    padding: 1em;
+    transition: opacity 1s linear;
+}
+
+.hidden {
+    opacity: 0;
+}
