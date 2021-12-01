@@ -1,21 +1,18 @@
-import {streamLines, sumArray} from './shared.mjs';
+import {sumArray} from './shared.mjs';
 
-async function part1(fn) {
+export async function* part1(asyncGen) {
     let numLargers = 0;
     let last = NaN;
 
-    for await (const line of streamLines(fn)) {
+    for await (const line of asyncGen) {
         const curr = parseInt(line, 10);
-        if (isFinite(last) && curr > last) {
-            ++numLargers;
-        }
+        if (isFinite(last) && curr > last) ++numLargers;
+        yield {curr, numLargers};
         last = curr;
     }
-
-    return numLargers;
 }
 
-async function part2(fn) {
+export async function* part2(asyncGen) {
     const windows = [
         { data: [], start: 0 },
         { data: [], start: 1 },
@@ -27,7 +24,7 @@ async function part2(fn) {
     let i = -1;
     let lastSum = NaN;
 
-    for await (const line of streamLines(fn)) {
+    for await (const line of asyncGen) {
         const curr = parseInt(line, 10);
         ++i;
 
@@ -49,29 +46,11 @@ async function part2(fn) {
         if (isFinite(windowIndex)) {
             const sum = sumArray(windows[windowIndex].data);
             const increased = isFinite(lastSum) && sum > lastSum;
-            //console.log(sum, increased);
             if (increased) ++numLargers;
+            yield { sum, increased, numLargers };
             lastSum = sum;
         }
 
         //console.log(windows.map(w => w.data));
     }
-
-    return numLargers;
 }
-
-async function go() {
-    const r1a = await part1('01a.txt');
-    console.log('r1a', r1a);
-
-    const r1 = await part1('01.txt');
-    console.log('r1', r1);
-
-    const r2a = await part2('01a.txt');
-    console.log('r2a', r2a);
-
-    const r2 = await part2('01.txt');
-    console.log('r2', r2);
-}
-
-go();
