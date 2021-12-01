@@ -121,3 +121,7 @@ export function setVisibility(el, visible, keepingLayout) {
 export function changeText(el, text) {
     el.firstChild.nodeValue = text;
 }
+
+export function scrollToBottom(el) {
+    el.scrollTop = el.scrollHeight;
+}

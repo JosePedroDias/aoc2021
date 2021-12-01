@@ -1,4 +1,4 @@
-import { streamLines, selectElement, buttonElement, checkboxElement, brElement, divElement, setVisibility, changeText, setAttributes } from './shared-browser.mjs';
+import { streamLines, selectElement, buttonElement, checkboxElement, brElement, divElement, setVisibility } from './shared-browser.mjs';
 
 export async function doDebugger({ parts, items }) {
     const body = document.body;
@@ -10,7 +10,7 @@ export async function doDebugger({ parts, items }) {
 
     let mainFormDivEl = divElement();
     let nextDivEl = divElement();
-    let debuggerDivEl = divElement({ className: 'debugger' });
+    let debuggerDivEl = divElement({ className: 'debugger hideable' });
 
     body.appendChild(mainFormDivEl);
     body.appendChild(nextDivEl);

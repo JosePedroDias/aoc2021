@@ -22,7 +22,7 @@ export async function* part2(asyncGen) {
 
     let numLargers = 0;
     let i = -1;
-    let lastSum = NaN;
+    let prevSum = NaN;
 
     for await (const line of asyncGen) {
         const curr = parseInt(line, 10);
@@ -37,19 +37,17 @@ export async function* part2(asyncGen) {
         }
 
         const windowsWith3 = windows
-        .map((w, i) => [i, w.data.length])
-        .filter(([_i, l]) => l === 3)
-        .map(([i, _l]) => i);
+            .map((w, i) => [i, w.data.length])
+            .filter(([_i, l]) => l === 3)
+            .map(([i, _l]) => i);
         const windowIndex = windowsWith3[0]; // as we know there is at most 1
 
         if (isFinite(windowIndex)) {
             const sum = sumArray(windows[windowIndex].data);
-            const increased = isFinite(lastSum) && sum > lastSum;
+            const increased = isFinite(prevSum) && sum > prevSum;
             if (increased) ++numLargers;
-            yield { sum, increased, numLargers };
-            lastSum = sum;
+            yield { prevSum, sum,increased, numLargers, windows: windows.map(w => w.data), windowIndex };
+            prevSum = sum;
         }
-
-        //console.log(windows.map(w => w.data));
     }
 }

@@ -10,7 +10,10 @@ br {
 
 .debugger {
     padding: 1em;
-    transition: opacity 1s linear;
+}
+
+.hideable {
+    transition: opacity 500ms linear;
 }
 
 .hidden {
@@ -23,4 +26,13 @@ br {
 
 .highlighted {
     background-color: yellow;
+}
+
+.steps, .aux {
+    padding: 2em;
+}
+
+.max-half-height {
+    max-height: 50vh;
+    overflow: auto;
 }
