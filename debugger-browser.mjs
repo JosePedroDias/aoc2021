@@ -85,11 +85,13 @@ export async function doDebugger(parts) {
 
 
 
-    for (const { partFn, onStep, onResult } of parts) {
+    for (const { partFn, onStart, onStep, onDone } of parts) {
+        onStart(step);
         mainFormDivEl.appendChild( buttonElement({
             label: partFn.name,
             onClick: () => {
-                runPart(partFn, onStep).then(onResult);
+                runPart(partFn, onStep)
+                .then((result) => onDone(result, step))
             }
         }) );
     }
