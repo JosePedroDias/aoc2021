@@ -5,8 +5,6 @@ import { part1, part2 } from './01.mjs';
 
 let state;
 
-const MAX_STEPS = 2;
-
 function deleteLater(el) {
     setTimeout(() => el.classList.add('hidden'), 400);
     setTimeout(() => {
